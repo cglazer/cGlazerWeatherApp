@@ -1,6 +1,5 @@
 package cglazer.myweathercglazer;
 
-
 import android.content.SharedPreferences;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -43,11 +42,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String zip = edit.getText().toString();
-                if (zip.length() == 5 && !zips.contains(zip)) {
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < zip.length(); i++) {
+                    if (zip.charAt(i) == ' ') {
+                        builder.append("%20");
+                    } else {
+                        builder.append(zip.charAt(i));
+                    }
+                }
+                zip = builder.toString();
+                if (!zips.contains(zip)) {
                     zips.add(zip);
                     adapter.notifyDataSetChanged();
                     edit.setText("");
-                    edit.setFocusable(false);
                 }
             }
         });
@@ -102,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
             if (!zips.contains(zip)) {
                 this.zips.add(zip);
             }
+        }
+        while (zips.size() > 3) {
+            zips.remove(1);
         }
         adapter.notifyDataSetChanged();
     }
